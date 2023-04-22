@@ -8,10 +8,11 @@ import (
 )
 
 type Config struct {
-	Address string
-	Port    string
-	Timeout time.Duration
-	DB      *DBConfig
+	Address     string
+	Port        string
+	TokenSecret string
+	Timeout     time.Duration
+	DB          *DBConfig
 }
 
 type DBConfig struct {
@@ -48,9 +49,10 @@ func Get() (*Config, error) {
 	}
 
 	return &Config{
-		Address: viper.GetString("ADDRESS"),
-		Port:    viper.GetString("PORT"),
-		Timeout: 10 * time.Second,
-		DB:      db,
+		Address:     viper.GetString("ADDRESS"),
+		Port:        viper.GetString("PORT"),
+		TokenSecret: viper.GetString("TOKEN_SECRET"),
+		Timeout:     10 * time.Second,
+		DB:          db,
 	}, nil
 }

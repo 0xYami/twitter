@@ -7,6 +7,7 @@ import (
 	"github.com/0xYami/twitter/config"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/cors"
 	"go.uber.org/zap"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -50,6 +51,10 @@ func (s *Server) DBMiddleware(next http.Handler) http.Handler {
 }
 
 func (s *Server) MountHandlers() {
+	s.Router.Use(cors.Handler(cors.Options{
+		AllowedOrigins: []string{"http://localhost:3000"},
+		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE"},
+	}))
 	s.Router.Use(middleware.RequestID)
 	s.Router.Use(middleware.RealIP)
 	s.Router.Use(middleware.CleanPath)
@@ -62,16 +67,13 @@ func (s *Server) MountHandlers() {
 
 	s.Router.Mount("/debug", middleware.Profiler())
 
-	s.Router.Route("/users", func(r chi.Router) {
-		r.Get("/", getAllUsers)
-		r.Post("/", createUser)
+	s.Router.Post("/auth", auth)
+	s.Router.Post("/register", createUser)
 
-		r.Route("/{userID}", func(r chi.Router) {
-			r.Use(userContext)
-			r.Get("/", getUserById)
-			r.Get("/tweets", getUserTweets)
-			r.Post("/tweets", createTweet)
-		})
+	s.Router.Route("/profiles/{id}", func(r chi.Router) {
+		r.Use(userContext)
+
+		r.Get("/", getUser)
 	})
 }
 

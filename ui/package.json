@@ -13,6 +13,7 @@
     "format:check": "prettier --check ."
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.9",
     "@types/node": "^18",
     "autoprefixer": "^10.4.14",
     "nuxt": "^3.4.2",
@@ -23,5 +24,10 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "packageManager": "pnpm@8.0.0"
+  "packageManager": "pnpm@8.0.0",
+  "dependencies": {
+    "@pinia/nuxt": "^0.4.9",
+    "pinia": "^2.0.35",
+    "zod": "^3.21.4"
+  }
 }
