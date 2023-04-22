@@ -1,0 +1,39 @@
+name: UI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['18.13']
+        pnpm-version: ['8.3']
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set node version to ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v2.2.4
+      with:
+        version: ${{ matrix.pnpm-version }}
+
+    - name: Install Dependencies
+      working-directory: ./ui
+      run: pnpm install
+
+    - name: Format
+      working-directory: ./ui
+      run: pnpm format:check
+
+    - name: Build
+      working-directory: ./ui
+      run: pnpm build

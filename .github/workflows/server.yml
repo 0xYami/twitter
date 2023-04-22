@@ -1,4 +1,4 @@
-name: Go
+name: Server
 
 on:
   pull_request:
@@ -6,7 +6,6 @@ on:
     branches: [main]
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     strategy:
@@ -21,8 +20,8 @@ jobs:
       with:
         go-version: ${{ matrix.go-version }}
 
-    - name: Build
+    - name: Build Server
       run: go build -v ./...
 
-    - name: Test
+    - name: Test Server
       run: go test -v ./...
