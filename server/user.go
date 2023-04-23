@@ -48,6 +48,12 @@ type createUserRequest struct {
 	Password string `json:"password" validate:"required,min=8"`
 }
 
+type createUserResponse struct {
+	UserID   uint   `json:"userID"`
+	Username string `json:"username"`
+	Token    string `json:"token"`
+}
+
 func createUser(w http.ResponseWriter, r *http.Request) {
 	var nu createUserRequest
 
@@ -56,9 +62,10 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user := &models.User{
-		Username: nu.Username,
-		Password: nu.Password,
+	user, err := models.NewUser(nu.Username, nu.Password)
+	if err != nil {
+		http.Error(w, "Failed to create user", http.StatusInternalServerError)
+		return
 	}
 
 	db := r.Context().Value("db").(*gorm.DB)
@@ -67,6 +74,12 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	res := &createUserResponse{
+		UserID:   user.ID,
+		Username: user.Username,
+		Token:    user.Token,
+	}
+
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(user)
+	json.NewEncoder(w).Encode(res)
 }
