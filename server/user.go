@@ -45,7 +45,6 @@ func getAllUsers(w http.ResponseWriter, r *http.Request) {
 
 type createUserRequest struct {
 	Username string `json:"username" validate:"required,min=3,max=15"`
-	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required,min=8"`
 }
 
@@ -59,7 +58,6 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 
 	user := &models.User{
 		Username: nu.Username,
-		Email:    nu.Email,
 		Password: nu.Password,
 	}
 
