@@ -5,6 +5,7 @@ export default defineNuxtConfig({
   modules: ['@pinia/nuxt'],
   runtimeConfig: {
     public: {
+      cookieName: config.cookieName,
       serverBaseURL: config.serverBaseURL,
     },
   },

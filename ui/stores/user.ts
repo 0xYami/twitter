@@ -19,10 +19,10 @@ export const useUserStore = defineStore('user', {
   state: (): UserState => initialState,
   actions: {
     async authenticate() {
-      const config = useRuntimeConfig();
+      const config = useRuntimeConfig().public;
       const headers = useRequestHeaders(['cookie']);
       const response = await asyncFaillable<{ id: number; username: string; token: string }>(
-        $fetch(`${config.public.serverBaseURL}/auth`, {
+        $fetch(`${config.serverBaseURL}/auth`, {
           method: 'POST',
           headers,
           parseResponse: JSON.parse,
@@ -41,9 +41,9 @@ export const useUserStore = defineStore('user', {
       });
     },
     async register(credentials: { username: string; password: string }) {
-      const config = useRuntimeConfig();
+      const config = useRuntimeConfig().public;
       const response = await asyncFaillable<{ id: number; username: string; token: string }>(
-        $fetch(`${config.public.serverBaseURL}/register`, {
+        $fetch(`${config.serverBaseURL}/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ export const useUserStore = defineStore('user', {
         throw new Error('[store] Registration failed');
       }
 
-      const cookie = useCookie('token', { httpOnly: true, secure: true });
+      const cookie = useCookie(config.cookieName, { httpOnly: true, secure: true });
       const state: UserState = {
         id: response.result.id.toString(),
         username: response.result.username,
