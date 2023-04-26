@@ -6,6 +6,6 @@ const configSchema = z.object({
 });
 
 export const config = configSchema.parse({
-  cookieName: process.env.COOKIE_NAME,
-  serverBaseURL: process.env.SERVER_BASE_URL,
+  cookieName: process.env.COOKIE_NAME || 'twitter-cookie',
+  serverBaseURL: process.env.SERVER_BASE_URL || 'http://localhost:4000',
 });
