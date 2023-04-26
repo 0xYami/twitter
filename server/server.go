@@ -67,16 +67,13 @@ func (s *Server) MountHandlers() {
 
 	s.Router.Mount("/debug", middleware.Profiler())
 
-	s.Router.Route("/users", func(r chi.Router) {
-		r.Get("/", getAllUsers)
-		r.Post("/", createUser)
+	s.Router.Post("/auth", auth)
+	s.Router.Post("/register", createUser)
 
-		r.Route("/{userID}", func(r chi.Router) {
-			r.Use(userContext)
-			r.Get("/", getUserById)
-			r.Get("/tweets", getUserTweets)
-			r.Post("/tweets", createTweet)
-		})
+	s.Router.Route("/profiles/{id}", func(r chi.Router) {
+		r.Use(userContext)
+
+		r.Get("/", getUser)
 	})
 }
 
