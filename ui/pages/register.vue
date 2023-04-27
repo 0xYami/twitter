@@ -1,16 +1,39 @@
 <script setup lang="ts">
 import { useUserStore } from '~/stores/user';
+import { asyncFaillable } from '~/lib/utils';
 
 const user = useUserStore();
 const username = useState('username', () => '');
 const password = useState('password', () => '');
+const isRegistering = useState('isRegistering', () => false);
+
+const register = async () => {
+  isRegistering.value = true;
+
+  const tryRegister = await asyncFaillable(
+    user.register({
+      username: username.value,
+      password: password.value,
+    }),
+  );
+
+  if (tryRegister.failed) {
+    isRegistering.value = false;
+    return;
+  }
+  await navigateTo('/');
+};
 </script>
 
 <template>
   <div class="h-screen flex flex-col items-center justify-center bg-gray-800">
-    <div class="w-[420px] h-80 px-12 pt-8 pb-2 rounded-xl bg-black">
+    <div class="w-[420px] h-80 px-12 py-8 rounded-xl bg-black">
+      <div v-if="isRegistering" class="h-full flex items-center justify-center">
+        <div>Loading...</div>
+      </div>
       <form
-        @submit.prevent="() => user.register({ username, password })"
+        v-if="!isRegistering"
+        @submit.prevent="() => register()"
         class="relative h-full flex flex-col items-start space-y-4"
       >
         <div class="text-3xl font-bold mb-2">Create your account</div>
@@ -32,7 +55,7 @@ const password = useState('password', () => '');
         />
         <button
           type="submit"
-          class="absolute bottom-3 w-full py-3 text-black font-bold rounded-3xl bg-white"
+          class="absolute -bottom-2 w-full py-3 text-black font-bold rounded-3xl bg-white"
         >
           Create
         </button>

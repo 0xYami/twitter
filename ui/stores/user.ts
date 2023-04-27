@@ -60,7 +60,7 @@ export const useUserStore = defineStore('user', {
         throw new Error('[store] Registration failed');
       }
 
-      const cookie = useCookie(config.cookieName, { httpOnly: true, secure: true });
+      const cookie = useCookie(config.cookieName);
       const state: UserState = {
         id: response.result.id.toString(),
         username: response.result.username,

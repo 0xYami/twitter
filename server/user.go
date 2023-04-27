@@ -17,7 +17,7 @@ type userResponse struct {
 }
 
 func auth(w http.ResponseWriter, r *http.Request) {
-	cookie, err := r.Cookie("token")
+	cookie, err := r.Cookie("twitter-token")
 	if err != nil {
 		http.Error(w, "cookie not found", http.StatusUnauthorized)
 		return
@@ -43,7 +43,7 @@ func auth(w http.ResponseWriter, r *http.Request) {
 
 func userContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		cookie, err := r.Cookie("token")
+		cookie, err := r.Cookie("twitter-token")
 		if err != nil {
 			http.Error(w, "[context] cookie not found", http.StatusUnauthorized)
 			return
