@@ -3,6 +3,7 @@ type FollowSuggestion = {
   username: string;
   handle: string;
 };
+
 const followSuggestions: FollowSuggestion[] = [
   {
     username: 'Alice',
