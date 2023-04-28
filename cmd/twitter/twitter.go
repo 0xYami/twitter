@@ -13,7 +13,7 @@ func main() {
 	}
 	defer logger.Sync()
 
-	cfg, err := config.Get()
+	cfg, err := config.Load(".")
 	if err != nil {
 		logger.Panic("Failed to load config")
 	}

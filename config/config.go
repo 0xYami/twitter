@@ -31,7 +31,8 @@ func (c *DBConfig) DSN() string {
 	)
 }
 
-func Get() (*Config, error) {
+func Load(path string) (*Config, error) {
+	viper.AddConfigPath(path)
 	viper.SetConfigFile(".env")
 
 	err := viper.ReadInConfig()
