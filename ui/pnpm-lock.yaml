@@ -1,6 +1,9 @@
 lockfileVersion: '6.0'
 
 dependencies:
+  '@heroicons/vue':
+    specifier: ^2.0.17
+    version: 2.0.17(vue@3.2.47)
   '@pinia/nuxt':
     specifier: ^0.4.9
     version: 0.4.9(vue@3.2.47)
@@ -525,6 +528,14 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /@heroicons/vue@2.0.17(vue@3.2.47):
+    resolution: {integrity: sha512-M5P6Y9tmctbtv/IC1dO5vTw9xqppYxm/5BKuL4hGlxxLvaxbnTmMAoxTIzezSdYAaLh63emgOCBMa+mxphRxUQ==}
+    peerDependencies:
+      vue: '>= 3'
+    dependencies:
+      vue: 3.2.47
+    dev: false
 
   /@ioredis/commands@1.2.0:
     resolution: {integrity: sha512-Sx1pU8EM64o2BrqNpEO1CNLtKQwyhuXuqyfH7oGKCk+1a33d2r5saW8zNwm3j6BTExtjrv2BxTgzzkMwts6vGg==}

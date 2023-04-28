@@ -2,6 +2,10 @@
 import { useUserStore } from '~/stores/user';
 import { asyncFaillable } from '~/lib/utils';
 
+definePageMeta({
+  layout: false,
+});
+
 const user = useUserStore();
 const username = useState('username', () => '');
 const password = useState('password', () => '');
