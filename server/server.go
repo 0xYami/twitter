@@ -75,6 +75,10 @@ func (s *Server) MountHandlers() {
 
 		r.Get("/", getUser)
 	})
+
+	s.Router.Route("/tweets", func(r chi.Router) {
+		r.With(userContext).Post("/", createTweet)
+	})
 }
 
 func (s *Server) Start() error {
