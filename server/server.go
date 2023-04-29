@@ -52,8 +52,9 @@ func (s *Server) DBMiddleware(next http.Handler) http.Handler {
 
 func (s *Server) MountHandlers() {
 	s.Router.Use(cors.Handler(cors.Options{
-		AllowedOrigins: []string{"http://localhost:3000"},
-		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE"},
+		AllowedOrigins:   []string{"http://localhost:3000"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
+		AllowCredentials: true,
 	}))
 	s.Router.Use(middleware.RequestID)
 	s.Router.Use(middleware.RealIP)
