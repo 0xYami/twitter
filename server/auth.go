@@ -19,7 +19,7 @@ func auth(w http.ResponseWriter, r *http.Request) {
 	user := &models.User{}
 
 	if err := db.Where("token = ?", cookie.Value).First(&user).Error; err != nil {
-		http.Error(w, "[context] failed to get user", http.StatusUnauthorized)
+		http.Error(w, "failed to get user", http.StatusUnauthorized)
 		return
 	}
 
