@@ -10,9 +10,9 @@ import (
 	"gorm.io/gorm"
 )
 
-type tweetsResource struct{}
+type tweetRouter struct{}
 
-func (rs tweetsResource) Routes() chi.Router {
+func (rs tweetRouter) Routes() chi.Router {
 	r := chi.NewRouter()
 
 	r.Route("/", func(r chi.Router) {
@@ -36,7 +36,7 @@ type tweetResponse struct {
 	CreatedAt time.Time `json:"createdAt"`
 }
 
-func (rs tweetsResource) ListLatest(w http.ResponseWriter, r *http.Request) {
+func (rs tweetRouter) ListLatest(w http.ResponseWriter, r *http.Request) {
 	var tweets []models.Tweet
 	db := r.Context().Value("db").(*gorm.DB)
 	if err := db.Preload("User").Model(&models.Tweet{}).Find(&tweets).Error; err != nil {
@@ -71,7 +71,7 @@ type createTweetResponse struct {
 	Text string `json:"text"`
 }
 
-func (rs tweetsResource) Create(w http.ResponseWriter, r *http.Request) {
+func (rs tweetRouter) Create(w http.ResponseWriter, r *http.Request) {
 	var nt createTweetRequest
 
 	if err := json.NewDecoder(r.Body).Decode(&nt); err != nil {

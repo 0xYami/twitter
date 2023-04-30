@@ -73,8 +73,8 @@ func (s *Server) MountHandlers() {
 	s.Router.Post("/auth", auth)
 	s.Router.Post("/register", registerUser)
 
-	s.Router.Mount("/profiles/{id}", profilesResource{}.Routes())
-	s.Router.Mount("/tweets", tweetsResource{}.Routes())
+	s.Router.Mount("/profiles/{id}", profileRouter{}.Routes())
+	s.Router.Mount("/tweets", tweetRouter{}.Routes())
 }
 
 func (s *Server) Start() error {

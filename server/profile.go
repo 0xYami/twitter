@@ -10,9 +10,9 @@ import (
 	"gorm.io/gorm"
 )
 
-type profilesResource struct{}
+type profileRouter struct{}
 
-func (rs profilesResource) Routes() chi.Router {
+func (rs profileRouter) Routes() chi.Router {
 	r := chi.NewRouter()
 
 	r.Route("/", func(r chi.Router) {
@@ -49,7 +49,7 @@ func profileContext(next http.Handler) http.Handler {
 	})
 }
 
-func (rs profilesResource) Get(w http.ResponseWriter, r *http.Request) {
+func (rs profileRouter) Get(w http.ResponseWriter, r *http.Request) {
 	user := r.Context().Value("user").(*models.User)
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(user)
