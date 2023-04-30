@@ -10,9 +10,25 @@ import {
 } from '@heroicons/vue/24/outline';
 import { useUserStore } from '~/stores/user';
 
+type Tweet = {
+  text: string;
+  createdAt: string;
+  user: {
+    name: string;
+    handle: string;
+  };
+};
+
 const userStore = useUserStore();
 const content = useState<null | string>('content', () => null);
 
+const tweetsQuery = useQuery({
+  queryKey: ['tweets'],
+  queryFn: async () => {
+    const { data } = await axios.get<Tweet[]>('http://localhost:4000/tweets/latest');
+    return data;
+  },
+});
 
 const createTweetQuery = useMutation({
   mutationKey: ['createTweet'],
@@ -29,7 +45,11 @@ const createTweetQuery = useMutation({
   <main class="w-1/2 border-x border-x-neutral-800">
     <div class="p-4 text-xl font-bold border-b border-b-neutral-800">Home</div>
     <div class="h-28 flex px-4 py-2 space-x-4 border-b border-b-neutral-800">
-      <img :src="'https://avatar.vercel.sh/'+ userStore.username + 'foo.svg'" alt="Avatar" class="w-11 h-11 rounded-full" />
+      <img
+        :src="'https://avatar.vercel.sh/' + userStore.username + 'foo.svg'"
+        alt="Avatar"
+        class="w-11 h-11 rounded-full"
+      />
       <form
         @submit.prevent="() => createTweetQuery.mutate()"
         class="w-full flex flex-col justify-between"
@@ -79,5 +99,11 @@ const createTweetQuery = useMutation({
         </div>
       </form>
     </div>
+    <div v-if="tweetsQuery.isLoading.value">Loading...</div>
+    <ul v-else>
+      <li v-for="tweet in tweetsQuery.data.value" class="border-b border-neutral-800">
+        <Tweet :user="tweet.user" :text="tweet.text" :createdAt="tweet.createdAt" />
+      </li>
+    </ul>
   </main>
 </template>

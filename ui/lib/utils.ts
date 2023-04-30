@@ -8,3 +8,10 @@ export const asyncFaillable = async <T>(fn: Promise<T>): Promise<AsyncFaillable<
     return { failed: true, reason: error };
   }
 };
+
+export const getElapsedHoursFromDate = (from: Date): string => {
+  const now = new Date();
+  const timeDiff = now.getTime() - from.getTime();
+  const hoursDiff = timeDiff / (1000 * 3600);
+  return Math.floor(hoursDiff).toString();
+};
