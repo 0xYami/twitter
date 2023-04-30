@@ -11,7 +11,7 @@ import {
 } from '@heroicons/vue/24/outline';
 import { useUserStore } from '~/stores/user';
 
-const user = useUserStore();
+const userStore = useUserStore();
 </script>
 
 <template>
@@ -82,10 +82,10 @@ const user = useUserStore();
       class="absolute bottom-4 w-[90%] flex items-center justify-between p-2 rounded-3xl hover:bg-gray-900"
     >
       <div class="flex items-center space-x-3">
-        <img src="https://avatar.vercel.sh/foo.svg" alt="Avatar" class="w-10 h-10 rounded-full" />
+        <img :src="userStore.avatarURL" alt="Avatar" class="w-10 h-10 rounded-full" />
         <div class="flex flex-col">
-          <div>{{ user.username }}</div>
-          <div class="text-neutral-400">@{{ user.username }}</div>
+          <div>{{ userStore.username }}</div>
+          <div class="text-neutral-400">@{{ userStore.username }}</div>
         </div>
       </div>
       <EllipsisHorizontalIcon class="w-5 h-5" />

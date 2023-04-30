@@ -22,9 +22,10 @@ type User struct {
 
 func NewUser(username string, password string) (*User, error) {
 	user := &User{
-		Username: username,
-		Password: password,
-		Handle:   username,
+		Username:  username,
+		Password:  password,
+		AvatarURL: "https://avatar.vercel.sh/" + username + ".svg",
+		Handle:    username,
 	}
 
 	token, err := user.generateJWT()

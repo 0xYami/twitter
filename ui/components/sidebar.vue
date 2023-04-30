@@ -2,20 +2,24 @@
 type FollowSuggestion = {
   username: string;
   handle: string;
+  avatarURL: string;
 };
 
 const followSuggestions: FollowSuggestion[] = [
   {
     username: 'Alice',
     handle: 'alice',
+    avatarURL: 'https://avatar.vercel.sh/alice.svg',
   },
   {
     username: 'John',
     handle: 'john',
+    avatarURL: 'https://avatar.vercel.sh/john.svg',
   },
   {
     username: 'Bob',
     handle: 'bob',
+    avatarURL: 'https://avatar.vercel.sh/bob.svg',
   },
 ];
 </script>
@@ -30,11 +34,7 @@ const followSuggestions: FollowSuggestion[] = [
         class="flex items-center justify-between px-4 py-2"
       >
         <div class="flex items-center space-x-3">
-          <img
-            :src="'https://avatar.vercel.sh/' + suggestion.handle + '.svg'"
-            alt="Avatar"
-            class="w-11 h-11 rounded-full"
-          />
+          <img :src="suggestion.avatarURL" alt="Avatar" class="w-11 h-11 rounded-full" />
           <div class="flex flex-col">
             <div>{{ suggestion.username }}</div>
             <div class="text-neutral-400">@{{ suggestion.handle }}</div>

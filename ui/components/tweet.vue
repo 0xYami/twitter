@@ -26,11 +26,7 @@ defineProps({
 
 <template>
   <div class="h-auto min-h-28 flex px-4 py-3 space-x-3">
-    <img
-      :src="'https://avatar.vercel.sh/' + user.name + '.svg'"
-      alt="Avatar"
-      class="w-12 h-12 rounded-full"
-    />
+    <img :src="user.avatarURL" alt="Avatar" class="w-12 h-12 rounded-full" />
     <div class="w-full flex flex-col justify-between">
       <div class="relative w-full flex items-center space-x-1">
         <div class="font-bold">{{ user.name }}</div>

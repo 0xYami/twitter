@@ -24,9 +24,11 @@ func auth(w http.ResponseWriter, r *http.Request) {
 	}
 
 	res := &profileResponse{
-		ID:       user.ID,
-		Username: user.Username,
-		Token:    user.Token,
+		ID:        user.ID,
+		Username:  user.Username,
+		Handle:    user.Handle,
+		AvatarURL: user.AvatarURL,
+		Token:     user.Token,
 	}
 
 	w.WriteHeader(http.StatusOK)

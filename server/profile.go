@@ -23,9 +23,11 @@ func (rs profileRouter) Routes() chi.Router {
 }
 
 type profileResponse struct {
-	ID       uint   `json:"id"`
-	Username string `json:"username"`
-	Token    string `json:"token"`
+	ID        uint   `json:"id"`
+	Username  string `json:"username"`
+	Handle    string `json:"handle"`
+	AvatarURL string `json:"avatarURL"`
+	Token     string `json:"token"`
 }
 
 func profileContext(next http.Handler) http.Handler {

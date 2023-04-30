@@ -4,6 +4,8 @@ import { asyncFaillable } from '~/lib/utils';
 type UserState = {
   id: string;
   username: string;
+  handle: string;
+  avatarURL: string;
   token: string;
   status: 'logged-in' | 'logged-out';
 };
@@ -11,8 +13,18 @@ type UserState = {
 const initialState: UserState = {
   id: '',
   username: '',
+  handle: '',
+  avatarURL: '',
   token: '',
   status: 'logged-out',
+};
+
+type AuthResponse = {
+  id: number;
+  username: string;
+  handle: string;
+  avatarURL: string;
+  token: string;
 };
 
 export const useUserStore = defineStore('user', {
@@ -22,7 +34,7 @@ export const useUserStore = defineStore('user', {
       const { $httpClient } = useNuxtApp();
       const headers = useRequestHeaders(['cookie']);
       const response = await asyncFaillable(
-        $httpClient.post<{ id: number; username: string; token: string }>({
+        $httpClient.post<AuthResponse>({
           url: '/api/auth',
           options: { headers },
         }),
@@ -35,6 +47,8 @@ export const useUserStore = defineStore('user', {
       this.$patch({
         id: response.result.id.toString(),
         username: response.result.username,
+        handle: response.result.handle,
+        avatarURL: response.result.avatarURL,
         token: response.result.token,
         status: 'logged-in',
       });
@@ -42,7 +56,7 @@ export const useUserStore = defineStore('user', {
     async register(credentials: { username: string; password: string }) {
       const { $httpClient } = useNuxtApp();
       const response = await asyncFaillable(
-        $httpClient.post<{ id: number; username: string; token: string }>({
+        $httpClient.post<AuthResponse>({
           url: '/api/register',
           data: {
             username: credentials.username,
@@ -60,6 +74,8 @@ export const useUserStore = defineStore('user', {
       const state: UserState = {
         id: response.result.id.toString(),
         username: response.result.username,
+        handle: response.result.handle,
+        avatarURL: response.result.avatarURL,
         token: response.result.token,
         status: 'logged-in',
       };

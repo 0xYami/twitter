@@ -25,8 +25,9 @@ func (rs tweetRouter) Routes() chi.Router {
 }
 
 type tweetUser struct {
-	Name   string `json:"name"`
-	Handle string `json:"handle"`
+	Name      string `json:"name"`
+	Handle    string `json:"handle"`
+	AvatarURL string `json:"avatarURL"`
 }
 
 type tweetResponse struct {
@@ -52,8 +53,9 @@ func (rs tweetRouter) ListLatest(w http.ResponseWriter, r *http.Request) {
 			Text:      tweet.Text,
 			CreatedAt: tweet.CreatedAt,
 			User: tweetUser{
-				Name:   tweet.User.Username,
-				Handle: tweet.User.Handle,
+				Name:      tweet.User.Username,
+				Handle:    tweet.User.Handle,
+				AvatarURL: tweet.User.AvatarURL,
 			},
 		}
 	}
