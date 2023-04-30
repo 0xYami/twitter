@@ -30,7 +30,9 @@ func CreateNewServer(cfg *config.Config, logger *zap.Logger) *Server {
 
 func (s *Server) InitDB() error {
 	dsn := s.Config.DB.DSN()
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		QueryFields: true,
+	})
 	if err != nil {
 		return err
 	}
@@ -78,6 +80,7 @@ func (s *Server) MountHandlers() {
 	})
 
 	s.Router.Route("/tweets", func(r chi.Router) {
+		r.Get("/latest", getLatestTweets)
 		r.With(userContext).Post("/", createTweet)
 	})
 }
