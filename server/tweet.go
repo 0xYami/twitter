@@ -16,7 +16,7 @@ func (rs tweetsResource) Routes() chi.Router {
 	r := chi.NewRouter()
 
 	r.Route("/", func(r chi.Router) {
-		r.With(userContext).Post("/", rs.Create)
+		r.With(profileContext).Post("/", rs.Create)
 
 		r.Get("/latest", rs.ListLatest)
 	})

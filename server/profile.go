@@ -16,19 +16,19 @@ func (rs profilesResource) Routes() chi.Router {
 	r := chi.NewRouter()
 
 	r.Route("/", func(r chi.Router) {
-		r.With(userContext).Get("/", rs.Get)
+		r.With(profileContext).Get("/", rs.Get)
 	})
 
 	return r
 }
 
-type userResponse struct {
+type profileResponse struct {
 	ID       uint   `json:"id"`
 	Username string `json:"username"`
 	Token    string `json:"token"`
 }
 
-func userContext(next http.Handler) http.Handler {
+func profileContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("twitter-token")
 		if err != nil {
