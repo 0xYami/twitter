@@ -8,7 +8,9 @@ import {
   ListBulletIcon,
   PhotoIcon,
 } from '@heroicons/vue/24/outline';
+import { useUserStore } from '~/stores/user';
 
+const userStore = useUserStore();
 const content = useState<null | string>('content', () => null);
 
 
@@ -27,7 +29,7 @@ const createTweetQuery = useMutation({
   <main class="w-1/2 border-x border-x-neutral-800">
     <div class="p-4 text-xl font-bold border-b border-b-neutral-800">Home</div>
     <div class="h-28 flex px-4 py-2 space-x-4 border-b border-b-neutral-800">
-      <img src="https://avatar.vercel.sh/foo.svg" alt="Avatar" class="w-11 h-11 rounded-full" />
+      <img :src="'https://avatar.vercel.sh/'+ userStore.username + 'foo.svg'" alt="Avatar" class="w-11 h-11 rounded-full" />
       <form
         @submit.prevent="() => createTweetQuery.mutate()"
         class="w-full flex flex-col justify-between"
