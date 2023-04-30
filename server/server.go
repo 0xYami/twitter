@@ -30,7 +30,9 @@ func CreateNewServer(cfg *config.Config, logger *zap.Logger) *Server {
 
 func (s *Server) InitDB() error {
 	dsn := s.Config.DB.DSN()
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		QueryFields: true,
+	})
 	if err != nil {
 		return err
 	}
@@ -52,8 +54,9 @@ func (s *Server) DBMiddleware(next http.Handler) http.Handler {
 
 func (s *Server) MountHandlers() {
 	s.Router.Use(cors.Handler(cors.Options{
-		AllowedOrigins: []string{"http://localhost:3000"},
-		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE"},
+		AllowedOrigins:   []string{"http://localhost:3000"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
+		AllowCredentials: true,
 	}))
 	s.Router.Use(middleware.RequestID)
 	s.Router.Use(middleware.RealIP)
@@ -74,6 +77,11 @@ func (s *Server) MountHandlers() {
 		r.Use(userContext)
 
 		r.Get("/", getUser)
+	})
+
+	s.Router.Route("/tweets", func(r chi.Router) {
+		r.Get("/latest", getLatestTweets)
+		r.With(userContext).Post("/", createTweet)
 	})
 }
 

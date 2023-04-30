@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/0xYami/twitter/models"
-	"github.com/go-chi/chi/v5"
 	"gorm.io/gorm"
 )
 
@@ -16,50 +15,19 @@ type userResponse struct {
 	Token    string `json:"token"`
 }
 
-func auth(w http.ResponseWriter, r *http.Request) {
-	cookie, err := r.Cookie("twitter-token")
-	if err != nil {
-		http.Error(w, "cookie not found", http.StatusUnauthorized)
-		return
-	}
-
-	db := r.Context().Value("db").(*gorm.DB)
-	user := &models.User{}
-
-	if err := db.Where("token = ?", cookie.Value).First(&user).Error; err != nil {
-		http.Error(w, "[context] failed to get user", http.StatusUnauthorized)
-		return
-	}
-
-	res := &userResponse{
-		ID:       user.ID,
-		Username: user.Username,
-		Token:    user.Token,
-	}
-
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(res)
-}
-
 func userContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("twitter-token")
 		if err != nil {
-			http.Error(w, "[context] cookie not found", http.StatusUnauthorized)
-			return
-		}
-
-		id := chi.URLParam(r, "id")
-		if id == "" {
-			http.Error(w, "[context] missing user id", http.StatusUnauthorized)
+			http.Error(w, "cookie not found", http.StatusUnauthorized)
 			return
 		}
 
 		db := r.Context().Value("db").(*gorm.DB)
 		user := &models.User{}
 
-		if err := db.Where("id = ? AND token = ?", id, cookie.Value).First(&user).Error; err != nil {
-			http.Error(w, "[context] failed to get user", http.StatusNotFound)
+		if err := db.Where("token = ?", cookie.Value).First(&user).Error; err != nil {
+			http.Error(w, "failed to get user", http.StatusNotFound)
 			return
 		}
 
