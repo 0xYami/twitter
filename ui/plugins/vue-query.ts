@@ -9,6 +9,7 @@ export default defineNuxtPlugin((nuxt) => {
     defaultOptions: {
       queries: {
         refetchOnWindowFocus: false,
+        retry: false,
       },
     },
   });
