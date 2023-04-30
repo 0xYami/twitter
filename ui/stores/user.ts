@@ -19,13 +19,12 @@ export const useUserStore = defineStore('user', {
   state: (): UserState => initialState,
   actions: {
     async authenticate() {
-      const config = useRuntimeConfig().public;
+      const { $httpClient } = useNuxtApp();
       const headers = useRequestHeaders(['cookie']);
-      const response = await asyncFaillable<{ id: number; username: string; token: string }>(
-        $fetch(`${config.serverBaseURL}/auth`, {
-          method: 'POST',
-          headers,
-          parseResponse: JSON.parse,
+      const response = await asyncFaillable(
+        $httpClient.post<{ id: number; username: string; token: string }>({
+          url: '/api/auth',
+          options: { headers },
         }),
       );
 
@@ -41,18 +40,14 @@ export const useUserStore = defineStore('user', {
       });
     },
     async register(credentials: { username: string; password: string }) {
-      const config = useRuntimeConfig().public;
-      const response = await asyncFaillable<{ id: number; username: string; token: string }>(
-        $fetch(`${config.serverBaseURL}/register`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: {
+      const { $httpClient } = useNuxtApp();
+      const response = await asyncFaillable(
+        $httpClient.post<{ id: number; username: string; token: string }>({
+          url: '/api/register',
+          data: {
             username: credentials.username,
             password: credentials.password,
           },
-          parseResponse: JSON.parse,
         }),
       );
 
@@ -60,6 +55,7 @@ export const useUserStore = defineStore('user', {
         throw new Error('[store] Registration failed');
       }
 
+      const config = useRuntimeConfig().public;
       const cookie = useCookie(config.cookieName);
       const state: UserState = {
         id: response.result.id.toString(),

@@ -68,21 +68,17 @@ func (s *Server) MountHandlers() {
 	s.Router.Use(middleware.Recoverer)
 	s.Router.Use(middleware.Timeout(s.Config.Timeout))
 
-	s.Router.Mount("/debug", middleware.Profiler())
+	apiRouter := chi.NewRouter()
 
-	s.Router.Post("/auth", auth)
-	s.Router.Post("/register", createUser)
+	apiRouter.Mount("/debug", middleware.Profiler())
 
-	s.Router.Route("/profiles/{id}", func(r chi.Router) {
-		r.Use(userContext)
+	apiRouter.Post("/auth", auth)
+	apiRouter.Post("/register", registerUser)
 
-		r.Get("/", getUser)
-	})
+	apiRouter.Mount("/profiles/{id}", profileRouter{}.Routes())
+	apiRouter.Mount("/tweets", tweetRouter{}.Routes())
 
-	s.Router.Route("/tweets", func(r chi.Router) {
-		r.Get("/latest", getLatestTweets)
-		r.With(userContext).Post("/", createTweet)
-	})
+	s.Router.Mount("/api", apiRouter)
 }
 
 func (s *Server) Start() error {

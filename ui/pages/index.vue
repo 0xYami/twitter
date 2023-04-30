@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useMutation, useQuery } from '@tanstack/vue-query';
-import axios from 'axios';
 import {
   CalendarIcon,
   FaceSmileIcon,
@@ -19,23 +18,26 @@ type Tweet = {
   };
 };
 
+const { $httpClient } = useNuxtApp();
 const userStore = useUserStore();
 const content = useState<null | string>('content', () => null);
 
 const tweetsQuery = useQuery({
   queryKey: ['tweets'],
   queryFn: async () => {
-    const { data } = await axios.get<Tweet[]>('http://localhost:4000/tweets/latest');
-    return data;
+    return $httpClient.get<Tweet[]>({
+      url: '/api/tweets/latest',
+    });
   },
 });
 
 const createTweetQuery = useMutation({
   mutationKey: ['createTweet'],
   mutationFn: async () => {
-    const body = { text: content.value };
-    return axios.post('http://localhost:4000/tweets', body, {
-      withCredentials: true,
+    return $httpClient.post({
+      url: '/api/tweets',
+      data: { text: content.value },
+      options: { withCredentials: true },
     });
   },
 });

@@ -23,7 +23,7 @@ func auth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res := &userResponse{
+	res := &profileResponse{
 		ID:       user.ID,
 		Username: user.Username,
 		Token:    user.Token,
