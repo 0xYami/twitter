@@ -1,43 +1,37 @@
 <script setup lang="ts">
+import { useMutation } from '@tanstack/vue-query';
 import { useUserStore } from '~/stores/user';
-import { asyncFaillable } from '~/lib/utils';
 
 definePageMeta({
   layout: false,
 });
 
-const user = useUserStore();
+const userStore = useUserStore();
 const username = useState('username', () => '');
 const password = useState('password', () => '');
-const isRegistering = useState('isRegistering', () => false);
 
-const register = async () => {
-  isRegistering.value = true;
-
-  const tryRegister = await asyncFaillable(
-    user.register({
+const register = useMutation({
+  mutationKey: ['register'],
+  mutationFn: async () => {
+    return userStore.register({
       username: username.value,
       password: password.value,
-    }),
-  );
+    });
+  },
+  onSuccess: () => navigateTo('/'),
+});
 
-  if (tryRegister.failed) {
-    isRegistering.value = false;
-    return;
-  }
-  await navigateTo('/');
-};
 </script>
 
 <template>
   <div class="h-screen flex flex-col items-center justify-center bg-gray-800">
     <div class="w-[420px] h-80 px-12 py-8 rounded-xl bg-black">
-      <div v-if="isRegistering" class="h-full flex items-center justify-center">
+      <div v-if="register.isLoading.value" class="h-full flex items-center justify-center">
         <div>Loading...</div>
       </div>
       <form
-        v-if="!isRegistering"
-        @submit.prevent="() => register()"
+        v-else
+        @submit.prevent="() => register.mutate()"
         class="relative h-full flex flex-col items-start space-y-4"
       >
         <div class="text-3xl font-bold mb-2">Create your account</div>
