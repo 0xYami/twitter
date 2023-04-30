@@ -9,6 +9,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      animation: {
+        'spin-fast': 'spin 0.5s linear infinite',
+      },
       colors: {
         bunker: {
           50: '#f3f3f4',
