@@ -6,8 +6,23 @@ import (
 	"time"
 
 	"github.com/0xYami/twitter/models"
+	"github.com/go-chi/chi/v5"
 	"gorm.io/gorm"
 )
+
+type tweetsResource struct{}
+
+func (rs tweetsResource) Routes() chi.Router {
+	r := chi.NewRouter()
+
+	r.Route("/", func(r chi.Router) {
+		r.With(userContext).Post("/", rs.Create)
+
+		r.Get("/latest", rs.ListLatest)
+	})
+
+	return r
+}
 
 type tweetUser struct {
 	Name   string `json:"name"`
@@ -21,7 +36,7 @@ type tweetResponse struct {
 	CreatedAt time.Time `json:"createdAt"`
 }
 
-func getLatestTweets(w http.ResponseWriter, r *http.Request) {
+func (rs tweetsResource) ListLatest(w http.ResponseWriter, r *http.Request) {
 	var tweets []models.Tweet
 	db := r.Context().Value("db").(*gorm.DB)
 	if err := db.Preload("User").Model(&models.Tweet{}).Find(&tweets).Error; err != nil {
@@ -56,7 +71,7 @@ type createTweetResponse struct {
 	Text string `json:"text"`
 }
 
-func createTweet(w http.ResponseWriter, r *http.Request) {
+func (rs tweetsResource) Create(w http.ResponseWriter, r *http.Request) {
 	var nt createTweetRequest
 
 	if err := json.NewDecoder(r.Body).Decode(&nt); err != nil {
