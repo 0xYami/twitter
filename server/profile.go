@@ -6,8 +6,21 @@ import (
 	"net/http"
 
 	"github.com/0xYami/twitter/models"
+	"github.com/go-chi/chi/v5"
 	"gorm.io/gorm"
 )
+
+type profilesResource struct{}
+
+func (rs profilesResource) Routes() chi.Router {
+	r := chi.NewRouter()
+
+	r.Route("/", func(r chi.Router) {
+		r.With(userContext).Get("/", rs.Get)
+	})
+
+	return r
+}
 
 type userResponse struct {
 	ID       uint   `json:"id"`
@@ -36,7 +49,7 @@ func userContext(next http.Handler) http.Handler {
 	})
 }
 
-func getUser(w http.ResponseWriter, r *http.Request) {
+func (rs profilesResource) Get(w http.ResponseWriter, r *http.Request) {
 	user := r.Context().Value("user").(*models.User)
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(user)

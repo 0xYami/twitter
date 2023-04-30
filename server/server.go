@@ -73,13 +73,7 @@ func (s *Server) MountHandlers() {
 	s.Router.Post("/auth", auth)
 	s.Router.Post("/register", createUser)
 
-	s.Router.Route("/profiles/{id}", func(r chi.Router) {
-		r.Use(userContext)
-
-		r.Get("/", getUser)
-	})
-
-	s.Router.Mount("/", tweetsResource{}.Routes())
+	s.Router.Mount("/profiles/{id}", profilesResource{}.Routes())
 	s.Router.Mount("/tweets", tweetsResource{}.Routes())
 }
 
