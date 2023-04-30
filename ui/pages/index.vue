@@ -25,8 +25,8 @@ const content = useState<null | string>('content', () => null);
 const tweetsQuery = useQuery({
   queryKey: ['tweets'],
   queryFn: async () => {
-    const { data } = await axios.get<Tweet[]>('http://localhost:4000/tweets/latest');
-    return data;
+    const { data } = await axios.get<Tweet[]>('http://localhost:4000/api/tweets/latest');
+    return data
   },
 });
 
@@ -34,7 +34,7 @@ const createTweetQuery = useMutation({
   mutationKey: ['createTweet'],
   mutationFn: async () => {
     const body = { text: content.value };
-    return axios.post('http://localhost:4000/tweets', body, {
+    return axios.post('http://localhost:4000/api/tweets', body, {
       withCredentials: true,
     });
   },

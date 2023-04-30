@@ -22,7 +22,7 @@ export const useUserStore = defineStore('user', {
       const config = useRuntimeConfig().public;
       const headers = useRequestHeaders(['cookie']);
       const response = await asyncFaillable<{ id: number; username: string; token: string }>(
-        $fetch(`${config.serverBaseURL}/auth`, {
+        $fetch(`${config.serverBaseURL}/api/auth`, {
           method: 'POST',
           headers,
           parseResponse: JSON.parse,
@@ -43,7 +43,7 @@ export const useUserStore = defineStore('user', {
     async register(credentials: { username: string; password: string }) {
       const config = useRuntimeConfig().public;
       const response = await asyncFaillable<{ id: number; username: string; token: string }>(
-        $fetch(`${config.serverBaseURL}/register`, {
+        $fetch(`${config.serverBaseURL}/api/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
