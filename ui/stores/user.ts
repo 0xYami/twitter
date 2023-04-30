@@ -21,10 +21,12 @@ export const useUserStore = defineStore('user', {
     async authenticate() {
       const { $httpClient } = useNuxtApp();
       const headers = useRequestHeaders(['cookie']);
-      const response = await asyncFaillable($httpClient.post<{ id: number; username: string; token: string }>({
-        url: '/api/auth',
-        options: { headers },
-      }));
+      const response = await asyncFaillable(
+        $httpClient.post<{ id: number; username: string; token: string }>({
+          url: '/api/auth',
+          options: { headers },
+        }),
+      );
 
       if (response.failed) {
         throw new Error('[store] Authentication failed');

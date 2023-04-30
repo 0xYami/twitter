@@ -20,7 +20,6 @@ const register = useMutation({
   },
   onSuccess: () => navigateTo('/'),
 });
-
 </script>
 
 <template>

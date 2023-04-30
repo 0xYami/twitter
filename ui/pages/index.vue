@@ -18,7 +18,7 @@ type Tweet = {
   };
 };
 
-const { $httpClient } = useNuxtApp()
+const { $httpClient } = useNuxtApp();
 const userStore = useUserStore();
 const content = useState<null | string>('content', () => null);
 
@@ -27,7 +27,7 @@ const tweetsQuery = useQuery({
   queryFn: async () => {
     return $httpClient.get<Tweet[]>({
       url: '/api/tweets/latest',
-    })
+    });
   },
 });
 
@@ -38,7 +38,7 @@ const createTweetQuery = useMutation({
       url: '/api/tweets',
       data: { text: content.value },
       options: { withCredentials: true },
-    })
+    });
   },
 });
 </script>

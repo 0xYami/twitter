@@ -1,4 +1,4 @@
-import { HttpClient } from '~/lib/http-client'
+import { HttpClient } from '~/lib/http-client';
 
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig().public;
