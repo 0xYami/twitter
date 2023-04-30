@@ -71,7 +71,7 @@ func (s *Server) MountHandlers() {
 	s.Router.Mount("/debug", middleware.Profiler())
 
 	s.Router.Post("/auth", auth)
-	s.Router.Post("/register", createUser)
+	s.Router.Post("/register", registerUser)
 
 	s.Router.Mount("/profiles/{id}", profilesResource{}.Routes())
 	s.Router.Mount("/tweets", tweetsResource{}.Routes())
